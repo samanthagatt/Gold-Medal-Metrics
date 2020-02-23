@@ -11,7 +11,7 @@ const createCountryTable = () => {
         code TEXT NOT NULL,
         gdp INTEGER,
         population INTEGER
-    )`;
+    );`;
 };
 
 /*
@@ -30,7 +30,7 @@ const createGoldMedalTable = () => {
         sport TEXT NOT NULL,
         discipline TEXT NOT NULL,
         event TEXT NOT NULL
-    )`;
+    );`;
 };
 
 /*
@@ -38,7 +38,11 @@ Returns a SQL query string that will find the number of gold medals for the give
 */
 
 const goldMedalNumber = country => {
-    return;
+    return `
+        SELECT COUNT(*) AS 'count'
+        FROM GoldMedal
+        WHERE country = '${country}';
+    `;
 };
 
 /*
@@ -46,8 +50,18 @@ Returns a SQL query string that will find the year where the given country
 won the most summer medals, along with the number of medals aliased to 'count'.
 */
 
+const mostWinsBySeason = (country, season) => {
+    return `
+        SELECT year, COUNT(*) AS 'count'
+        FROM GoldMedal
+        WHERE country = '${country}' AND season = '${season}'
+        GROUP BY year
+        LIMIT 1;
+    `;
+};
+
 const mostSummerWins = country => {
-    return;
+    return mostWinsBySeason(country, 'Summer');
 };
 
 /*
@@ -56,7 +70,7 @@ won the most winter medals, along with the number of medals aliased to 'count'.
 */
 
 const mostWinterWins = country => {
-    return;
+    return mostWinsBySeason(country, 'Winter');
 };
 
 /*

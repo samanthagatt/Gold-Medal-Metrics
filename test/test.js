@@ -317,7 +317,7 @@ describe('mostWinterWins', function() {
   });
 
   it('should return a SQL query string that retrieves the number of gold medals a country won in their best winter', function(done) {
-    const query = sql.mostSummerWins('Russia');
+    const query = sql.mostWinterWins('Russia');
     seededDb.get(query, (error, result) => {
       let count = getCount(result);
       if (count === 2) {
