@@ -146,7 +146,7 @@ Returns a SQL query string that will find the athlete with the most medals.
 */
 
 const mostMedaledAthlete = country => {
-    return;
+    return mostWins(country, 'name');
 };
 
 /*
@@ -155,10 +155,18 @@ optionally ordered by the given field in the specified direction.
 */
 
 const orderedMedals = (country, field, sortAscending) => {
-    return;
+    const direction = sortAscending ? '' : ' DESC';
+    const orderBy = field ? `
+        GROUP BY ${field}
+        ORDER BY ${field}${direction}` : '';
+    return `
+        SELECT *
+        FROM GoldMedal
+        WHERE country = '${country}'${orderBy};
+    `;
 };
 
-/*
+/* BONUS:
 Returns a SQL query string that will find the sports a country has
 won medals in. It should include the number of medals, aliased as 'count',
 as well as the percentage of this country's wins the sport represents,
