@@ -17,6 +17,14 @@ const countForBestYear = (country, season) => {
     return mostWins(country, 'year', season);
 };
 
+const numberOfWinsByGender = (country, men) => {
+    return `
+        SELECT gender, COUNT(DISTINCT name)
+        FROM GoldMedal
+        WHERE country = '${country}' AND gender = '${men ? 'Men' : 'Women'}';
+    `;
+}
+
 
 /*
 Returns a SQL query string that will create the Country table with four columns: name (required), code (required), gdp, and population.
@@ -122,7 +130,7 @@ Returns a SQL query string that will find the number of male medalists.
 */
 
 const numberMenMedalists = country => {
-    return;
+    return numberOfWinsByGender(country, true);
 };
 
 /*
@@ -130,7 +138,7 @@ Returns a SQL query string that will find the number of female medalists.
 */
 
 const numberWomenMedalists = country => {
-    return;
+    return numberOfWinsByGender(country);
 };
 
 /*
