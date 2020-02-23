@@ -1,6 +1,23 @@
 var sqlite3 = require('sqlite3');
 var db = new sqlite3.Database('./gold_medals.sqlite');
 
+
+const mostWins = (country, column, season) => {
+    return `
+        SELECT ${column}, COUNT(*) AS 'count'
+        FROM GoldMedal
+        WHERE country = '${country}'${season ? ` AND season = '${season}'` : ''}
+        GROUP BY ${column}
+        ORDER BY 2 DESC
+        LIMIT 1;
+    `;
+};
+
+const countForBestYear = (country, season) => {
+    return mostWins(country, 'year', season);
+};
+
+
 /*
 Returns a SQL query string that will create the Country table with four columns: name (required), code (required), gdp, and population.
 */
@@ -50,18 +67,8 @@ Returns a SQL query string that will find the year where the given country
 won the most summer medals, along with the number of medals aliased to 'count'.
 */
 
-const mostWinsBySeason = (country, season) => {
-    return `
-        SELECT year, COUNT(*) AS 'count'
-        FROM GoldMedal
-        WHERE country = '${country}' AND season = '${season}'
-        GROUP BY year
-        LIMIT 1;
-    `;
-};
-
 const mostSummerWins = country => {
-    return mostWinsBySeason(country, 'Summer');
+    return countForBestYear(country, 'Summer');
 };
 
 /*
@@ -70,7 +77,7 @@ won the most winter medals, along with the number of medals aliased to 'count'.
 */
 
 const mostWinterWins = country => {
-    return mostWinsBySeason(country, 'Winter');
+    return countForBestYear(country, 'Winter');
 };
 
 /*
@@ -79,8 +86,9 @@ won the most medals, along with the number of medals aliased to 'count'.
 */
 
 const bestYear = country => {
-    return;
+    return countForBestYear(country);
 };
+
 
 /*
 Returns a SQL query string that will find the discipline this country has 
@@ -88,7 +96,7 @@ won the most medals, along with the number of medals aliased to 'count'.
 */
 
 const bestDiscipline = country => {
-    return;
+    return mostWins(country, 'discipline');
 };
 
 /*
@@ -97,7 +105,7 @@ won the most medals, along with the number of medals aliased to 'count'.
 */
 
 const bestSport = country => {
-    return;
+    return mostWins(country, 'sport');
 };
 
 /*
@@ -106,7 +114,7 @@ won the most medals, along with the number of medals aliased to 'count'.
 */
 
 const bestEvent = country => {
-    return;
+    return mostWins(country, 'event');
 };
 
 /*
